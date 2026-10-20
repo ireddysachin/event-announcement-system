@@ -1,0 +1,16 @@
+# Python virtual environment
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local SQLite database
+app/events.db
+
+# Environment variables and secrets
+.env
+
+# macOS files
+.DS_Store

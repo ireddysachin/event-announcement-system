@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Announcement System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="hero">
+        <h1>Event Announcement System</h1>
+        <p>Discover events. Learn new skills. Stay connected.</p>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>Upcoming Events</h2>
+
+            <div class="event-list">
+                {% for event in events %}
+                <article class="event-card">
+                    <h3>{{ event.title }}</h3>
+                    <p><strong>Date:</strong> {{ event.date }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                    <p>{{ event.description }}</p>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+
+<section class="admin-section">
+    <h2>Admin - Create Event</h2>
+    <p>Add a new event to the announcement system.</p>
+
+    <form id="create-event-form">
+        <label for="event-title">Event Title</label>
+        <input
+            type="text"
+            id="event-title"
+            name="title"
+            placeholder="e.g. Python Workshop"
+            required
+        >
+
+        <label for="event-date">Event Date</label>
+        <input
+            type="date"
+            id="event-date"
+            name="date"
+            required
+        >
+
+        <label for="event-location">Location</label>
+        <input
+            type="text"
+            id="event-location"
+            name="location"
+            placeholder="e.g. Bengaluru or Online"
+            required
+        >
+
+        <label for="event-description">Description</label>
+    
+        <textarea
+             id="event-description"
+             name="description"
+             placeholder="Describe the event"
+            rows="4"
+            required
+        >
+        </textarea>
+    
+
+        <button type="submit">Create Event</button>
+    </form>
+
+    <p id="event-message" role="status"></p>
+</section>
+
+
+        <section class="subscribe-section">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to receive event announcements.</p>
+
+            <form id="subscribe-form">
+                <label for="email">Email address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+                <button type="submit">Subscribe</button>
+            </form>
+
+            <p id="message" role="status"></p>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
