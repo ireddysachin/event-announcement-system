@@ -1,87 +1,96 @@
-# 🚀 Event Announcement System
+## 🚀 Event Announcement System
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Flask-Web_Framework-black?logo=flask" alt="Flask">
   <img src="https://img.shields.io/badge/SQLite-Database-003B57?logo=sqlite&logoColor=white" alt="SQLite">
-  <img src="https://img.shields.io/badge/Tests-8_Passing-brightgreen?logo=pytest" alt="Tests">
-  <img src="https://img.shields.io/badge/Infrastructure-Terraform-7B42BC?logo=terraform&logoColor=white" alt="Terraform">
+  <img src="https://img.shields.io/badge/Tests-10_Passing-brightgreen?logo=pytest" alt="Tests">
+  <img src="https://img.shields.io/badge/Terraform-Infrastructure-7B42BC?logo=terraform&logoColor=white" alt="Terraform">
+  <img src="https://img.shields.io/badge/Floci-Local_Cloud_Emulation-blue" alt="Floci">
 </p>
 
 <p align="center">
-  <strong>A modern event announcement web application built with Python, Flask, and SQLite.</strong>
+  <strong>A full-stack event announcement application with local cloud-service integration and Infrastructure as Code.</strong>
   <br>
-  Discover events, create announcements, and subscribe for updates.
+  Create events, upload banners, and publish event announcements using Flask, SQLite, Terraform, and Floci.
 </p>
 
 ---
 
 ## 🌟 About the Project
 
-The **Event Announcement System** is a web application that helps users discover upcoming technical events and subscribe for announcements. Administrators can create events through a simple web interface.
+The **Event Announcement System** is a Python web application for managing technical events and displaying announcements through a browser-based interface.
 
-This project is also a hands-on learning journey into DevOps practices, automated testing, Infrastructure as Code, and CI/CD.
+The project combines application development with DevOps practices. Flask handles the web application and API routes, SQLite stores event and subscriber data, and Floci provides a local environment for experimenting with supported AWS-compatible services.
+
+Terraform manages the local S3 and SNS infrastructure, allowing infrastructure changes to be described as code without intentionally deploying resources to real AWS.
 
 ## ✨ Key Features
 
-<table>
-  <tr>
-    <td width="50%">
-      <h3>📅 Event Management</h3>
-      View upcoming events with dates, locations, and descriptions.
-    </td>
-    <td width="50%">
-      <h3>➕ Create Events</h3>
-      Add new events through an administrator form.
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3>📧 Email Subscription</h3>
-      Allow users to subscribe and prevent duplicate subscriptions.
-    </td>
-    <td width="50%">
-      <h3>🗄️ Persistent Storage</h3>
-      Store event and subscriber information in SQLite.
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3>🧪 Automated Testing</h3>
-      Validate application behaviour using pytest.
-    </td>
-    <td width="50%">
-      <h3>⚙️ DevOps Learning</h3>
-      Prepare for Terraform, Floci, and CI/CD integration.
-    </td>
-  </tr>
-</table>
+| Feature | Description |
+|---|---|
+| 📅 Event management | Display upcoming events with dates, locations, and descriptions |
+| ➕ Event creation | Create events through the web interface and REST API |
+| 🖼️ Banner uploads | Upload event banner images to local Floci S3 |
+| 🗄️ Database persistence | Store event details and subscriber records in SQLite |
+| 📧 Subscription | Accept subscriptions and handle duplicate subscriptions |
+| 🔔 Event announcements | Publish event notifications through a local SNS topic |
+| 🧪 Automated testing | Test application behaviour with pytest |
+| 🏗️ Infrastructure as Code | Manage local S3 and SNS resources with Terraform |
+| 🔒 Safer local development | Ignore Terraform state, plan files, the local database, and environment files in Git |
+
+## 🏛️ Architecture
+
+```text
+                 ┌─────────────────────────┐
+                 │      Web Browser        │
+                 │     HTML / CSS / JS     │
+                 └────────────┬────────────┘
+                              │ HTTP
+                 ┌────────────▼────────────┐
+                 │       Flask App         │
+                 │ Pages and REST APIs     │
+                 └──────┬──────────┬───────┘
+                        │          │
+              ┌─────────▼───┐  ┌───▼────────────────┐
+              │   SQLite    │  │   Floci S3 / SNS   │
+              │ Events and  │  │ Banner storage and │
+              │ Subscribers │  │ event notifications│
+              └─────────────┘  └────────────────────┘
+                                       ▲
+                              ┌────────┴────────┐
+                              │    Terraform    │
+                              │ Infrastructure  │
+                              │       as Code   │
+                              └─────────────────┘
+```
+
+### Request flow
+
+1. A user opens the event website.
+2. Flask retrieves event information from SQLite and renders the page.
+3. An administrator submits an event and may upload a banner image.
+4. The banner is uploaded to the local S3-compatible service.
+5. The event details and banner URI are saved in SQLite.
+6. The application attempts to publish an event announcement through the local SNS topic.
+7. Pytest verifies important application behaviours, including event creation and the notification call.
+
+**Note:** The SNS automated test uses a mocked publisher. It verifies that event creation invokes the notification function; it does not prove that an external subscriber received a message.
 
 ## 🛠️ Technology Stack
 
-| Technology | Role |
-|:---|:---|
-| 🐍 **Python** | Backend programming |
-| ⚡ **Flask** | Web application and REST API |
-| 🗃️ **SQLite** | Local database |
-| 🎨 **HTML, CSS, JavaScript** | Frontend development |
-| 🧪 **pytest** | Automated testing |
-| 🌿 **Git & GitHub** | Version control and collaboration |
-| 🏗️ **Terraform** | Infrastructure as Code — planned integration |
-| ☁️ **Floci** | Local cloud-service emulation — planned integration |
-| 🔄 **GitHub Actions** | CI/CD automation — planned integration |
-
-## 🖥️ Application Preview
-
-The application includes an upcoming-events page, an event creation form, and an email subscription form.
-
-> Add a screenshot of your running application here to showcase the interface on GitHub.
-
-<!-- After adding a screenshot, replace this comment with:
-<p align="center">
-  <img src="docs/images/event-announcement-preview.png" width="850" alt="Event Announcement System preview">
-</p>
--->
+| Technology | Purpose |
+|---|---|
+| Python | Backend programming |
+| Flask | Web application and REST API |
+| SQLite | Persistent local data storage |
+| HTML, CSS, JavaScript | Frontend interface |
+| Boto3 | Python client for S3-compatible and SNS services |
+| Floci | Local cloud-service emulation |
+| Terraform | Infrastructure as Code |
+| Docker | Runs the local Floci environment |
+| Pytest | Automated application testing |
+| Git and GitHub | Version control and source-code hosting |
 
 ## 📂 Project Structure
 
@@ -91,7 +100,8 @@ Event-Announcement-System/
 │   ├── __init__.py
 │   ├── app.py
 │   ├── database.py
-│   ├── events.db
+│   ├── s3_storage.py
+│   ├── sns_notifications.py
 │   ├── templates/
 │   │   └── index.html
 │   └── static/
@@ -102,11 +112,17 @@ Event-Announcement-System/
 ├── tests/
 │   └── test_app.py
 ├── terraform/
+│   ├── provider.tf
+│   ├── s3.tf
+│   ├── sns.tf
+│   └── .terraform.lock.hcl
 ├── docs/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
+
+The SQLite database is created locally and is intentionally excluded from Git. Terraform state and plan files are also excluded.
 
 ## 🚀 Getting Started
 
@@ -114,101 +130,151 @@ Event-Announcement-System/
 
 - Python 3.9 or later
 - Git
-- Visual Studio Code (recommended)
+- Docker
+- Terraform
+- AWS CLI
+- Floci running locally on port `4566`
 
-### 1️⃣ Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/ireddysachin/event-announcement-system.git
 cd event-announcement-system
 ```
 
-### 2️⃣ Create and activate a virtual environment
+### 2. Create and activate a virtual environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3️⃣ Install dependencies
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Start the application
+### 4. Start Floci
+
+Ensure your Floci container is running and healthy:
+
+```bash
+docker ps --filter name=floci
+```
+
+The application and Terraform configuration should use the local endpoint `http://localhost:4566` for supported services.
+
+### 5. Initialise and validate Terraform
+
+```bash
+terraform -chdir=terraform init
+terraform -chdir=terraform validate
+terraform -chdir=terraform plan
+```
+
+Review the plan before applying it. These configuration files are intended for local Floci use; verify the provider endpoints before running Terraform.
+
+To apply the local infrastructure:
+
+```bash
+terraform -chdir=terraform apply
+```
+
+Confirm the prompt only after checking that the configuration targets Floci rather than real AWS.
+
+### 6. Run the application
+
+From the project root:
 
 ```bash
 python app/app.py
 ```
 
-Open your browser at:
+Open the application in your browser:
 
 **http://127.0.0.1:5000**
 
-If port 5000 is already occupied, stop the previous Flask server before starting another instance.
+If port 5000 is already occupied, reuse the running Flask server or stop the existing process before starting another.
 
-## 🧪 Run the Tests
+## 🧪 Automated Testing
 
-Run the automated test suite:
+Run the test suite from the project root:
 
 ```bash
-python -m pytest -v
+pytest -q
 ```
 
-**Current result:** 8 tests passing ✅
+**Last verified result: 10 tests passed.**
 
-The tests cover application routes, event creation, event retrieval, subscription behaviour, and duplicate-event handling.
+The tests cover important application behaviour such as page loading, health checks, subscriptions, event creation, duplicate handling, and invocation of the SNS notification function.
+
+The SNS publishing test uses a mock, so it does not require a real SNS account or a delivered notification.
 
 ## 🔌 API Overview
 
-| Endpoint | Purpose |
-|:---|:---|
-| `GET /` | Display the web application |
-| `GET /health` | Check application health |
-| `GET /api/events` | Retrieve events |
-| `POST /api/events` | Create an event |
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/` | GET | Display the event website |
+| `/health` | GET | Check application health |
+| `/api/events` | GET | Retrieve event information |
+| `/api/events` | POST | Create an event |
+| `/api/banners` | POST | Upload an event banner |
+| `/banners/<filename>` | GET | Retrieve a stored banner through Flask |
 
-The subscription endpoint is implemented in the Flask application. Check `app/app.py` for its exact route and supported request method.
+The subscription endpoint is also implemented in the application. Refer to `app/app.py` for its exact route and request format.
 
-## 🏗️ Architecture & DevOps Roadmap
+## 🔐 Local Development and Safety
 
-The current application uses Flask for request handling and SQLite for local persistence.
+This project is designed to practise cloud-service integration without intentionally creating billable AWS resources.
 
-**Planned development stages:**
+- Configure Terraform to use the local Floci endpoint.
+- Use dummy credentials only for local emulation.
+- Do not commit `.env` files or real cloud credentials.
+- Keep Terraform state and plan files out of version control.
+- Keep the local SQLite database out of version control.
+- Review Terraform plans before applying changes.
 
-1. ✅ Build the web interface and Flask backend.
-2. ✅ Implement event and subscriber database operations.
-3. ✅ Add automated tests using pytest.
-4. ✅ Initialise Git and publish the repository to GitHub.
-5. 🔜 Add and validate Terraform configuration for local infrastructure.
-6. 🔜 Integrate supported Floci services.
-7. 🔜 Configure GitHub Actions for automated testing.
-8. 🔜 Document the final architecture and deployment workflow.
+**Important:** A local configuration is not automatically safe if its provider endpoints are changed. Always verify the endpoints before running Terraform.
 
-*The roadmap reflects the current development status; planned integrations are not yet claimed as completed.*
+## 🔄 CI/CD Roadmap
 
-## 🎯 Learning Objectives
+The current project includes application tests and Terraform configuration. GitHub Actions automation remains a future enhancement unless a workflow is added and verified.
 
-- Develop a Python web application using Flask.
-- Build and test REST API endpoints.
-- Work with SQLite and database operations.
-- Write automated tests with pytest.
-- Manage source code using Git and GitHub.
-- Learn Infrastructure as Code with Terraform.
-- Explore local cloud-service emulation with Floci.
-- Implement CI/CD workflows with GitHub Actions.
+Planned improvements:
+
+1. Configure GitHub Actions to run pytest on pushes and pull requests.
+2. Add automated Terraform formatting and validation checks.
+3. Improve banner content validation and error handling.
+4. Add stronger notification tests.
+5. Document the complete local setup with screenshots and troubleshooting steps.
+
+## 🎯 Interview Explanation
+
+**Project summary:**
+
+“I built an Event Announcement System using Python and Flask. It stores event and subscriber data in SQLite and supports event creation through a web interface and REST API. I integrated a local S3-compatible service through Boto3 to store banner images and used an SNS topic to publish event announcements. Terraform manages the local infrastructure, while Pytest checks the application's behaviour. I use Floci to practise AWS-compatible service integration locally and avoid intentionally deploying billable resources to AWS.”
+
+### Key interview topics
+
+- Why did you use Terraform instead of creating resources manually?
+- How does the application upload and retrieve banner images?
+- How does the Flask application invoke SNS?
+- How do you test notifications without publishing a real message?
+- How do you isolate the test database from development data?
+- How do you prevent Terraform state and plan files from being committed?
+- How would you implement CI/CD using GitHub Actions?
 
 ## 👨‍💻 Author
 
 **Sachin S. Ireddy**
 
-🔗 **GitHub:** [ireddysachin](https://github.com/ireddysachin)
+GitHub: [@ireddysachin](https://github.com/ireddysachin)
 
 ---
 
 <p align="center">
   ⭐ If you find this project useful, consider giving the repository a star!
   <br>
-  <strong>Built with Python • Flask • SQLite • DevOps</strong>
+  <strong>Built with Python • Flask • SQLite • Terraform • Floci</strong>
 </p>
