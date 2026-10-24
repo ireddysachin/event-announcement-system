@@ -36,4 +36,15 @@ def initialize_database():
                 email TEXT NOT NULL UNIQUE
             )
         """)
+        columns = [
+            row["name"]
+            for row in connection.execute(
+                "PRAGMA table_info(events)"
+            ).fetchall()
+        ]
+
+        if "banner_uri" not in columns:
+            connection.execute(
+                "ALTER TABLE events ADD COLUMN banner_uri TEXT"
+            )
         connection.commit()

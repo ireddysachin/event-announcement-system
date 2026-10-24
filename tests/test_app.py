@@ -170,3 +170,64 @@ def test_create_duplicate_event():
     assert "already exists" in second_response.json["message"]
 
 
+def test_create_event_saves_banner_uri():
+    client = app.test_client()
+
+    banner_uri = "s3://event-announcement-assets-demo-2026/event-banners/test-banner.jpg"
+
+    event = {
+        "title": "Banner Test Workshop",
+        "date": "2027-03-20",
+        "location": "Bengaluru",
+        "description": "Testing banner URI persistence",
+        "banner_uri": banner_uri,
+    }
+
+    response = client.post("/api/events", json=event)
+
+    assert response.status_code == 201
+    assert response.json["event"]["banner_uri"] == banner_uri
+
+    with get_connection() as connection:
+        saved_event = connection.execute(
+            "SELECT banner_uri FROM events WHERE title = ?",
+            ("Banner Test Workshop",),
+        ).fetchone()
+
+    assert saved_event is not None
+    assert saved_event["banner_uri"] == banner_uri
+
+
+def test_create_event_publishes_sns_notification(monkeypatch):
+    from app import publish_event_notification
+
+    published = {}
+
+    def fake_publish_event_notification(subject, message):
+        published["subject"] = subject
+        published["message"] = message
+        return "test-message-id"
+
+    monkeypatch.setattr(
+        "app.publish_event_notification",
+        fake_publish_event_notification,
+    )
+
+    client = app.test_client()
+
+    response = client.post(
+        "/api/events",
+        json={
+            "title": "SNS Integration Test",
+            "date": "2026-12-15",
+            "location": "Bengaluru",
+            "description": "Testing event notifications.",
+            "banner_uri": "",
+        },
+    )
+
+    assert response.status_code == 201
+    assert published["subject"] == "New Event: SNS Integration Test"
+    assert "Testing event notifications." in published["message"]
+
+

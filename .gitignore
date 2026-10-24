@@ -14,3 +14,12 @@ app/events.db
 
 # macOS files
 .DS_Store
+
+
+# Terraform local files and state
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfplan
+terraform/terraform.tfstate.backup
+terraform/crash.log

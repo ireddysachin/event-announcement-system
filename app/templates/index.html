@@ -19,7 +19,19 @@
 
             <div class="event-list">
                 {% for event in events %}
-                <article class="event-card">
+                <article class="event-card">     
+        
+    {% if event.banner_uri %}
+       <div class="event-banner">
+          <img
+            src="{{ url_for('serve_banner', filename=event.banner_uri.split('event-announcement-assets-demo-2026/', 1)[-1]) }}"
+             alt="Banner for {{ event.title }}"
+             loading="lazy"
+           >
+       </div>
+    {% endif %}
+
+
                     <h3>{{ event.title }}</h3>
                     <p><strong>Date:</strong> {{ event.date }}</p>
                     <p><strong>Location:</strong> {{ event.location }}</p>
@@ -35,6 +47,15 @@
     <p>Add a new event to the announcement system.</p>
 
     <form id="create-event-form">
+
+    <label for="event-banner">Event Banner Image</label>
+    <input
+       type="file"
+       id="event-banner"
+       name="banner"
+       accept="image/*"
+    >
+
         <label for="event-title">Event Title</label>
         <input
             type="text"
